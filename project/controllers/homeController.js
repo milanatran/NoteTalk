@@ -5,7 +5,7 @@ exports.sendReqParam = (req, res) => {
 
 exports.respondWithName = (req, res) => {
  let paramsName = req.params.myName;
- res.render("layouts", { name: paramsName });
+ res.render("index", { name: paramsName });
 };
 
 exports.showData = (req, res) => {
