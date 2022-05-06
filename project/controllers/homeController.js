@@ -1,15 +1,28 @@
-exports.sendReqParam = (req, res) => {
- let chat = req.params.url;
- res.send(`This is the page for ${chat}`);
-};
+exports.showHomePage = (req, res) => {
+  res.render("index");
+}
 
-exports.respondWithName = (req, res) => {
- let paramsName = req.params.myName;
- res.render("index", { name: paramsName });
-};
+exports.showSignIn = (req, res) => {
+  res.render("signIn");
+}
 
-exports.showData = (req, res) => {
- console.log(req.body);
- console.log(req.query);
- res.send("POST Successful!");
+exports.postedSignUp = (req, res) => {
+  res.render("confirmMail");
+}
+
+var room = [
+ {
+ title: "Project NoteTalk"
+ },
+ {
+ title: "IMI Spam"
+ },
+ {
+ title: "Family Chat"
+ }
+];
+exports.showOverview = (req, res) => {
+ res.render("overview", {
+ chatrooms: room
+ });
 };

@@ -5,8 +5,9 @@
     <title></title>
   </head>
   <body>
-    <h1>Homepage </h1>
-    <p>Hi, we're NoteTalk blabla</p>
-    <p>Here is the link to the Login: *link*</p>
+    <h1>Chatrooms:</h1>
+    <% chatrooms.forEach(room => { %>
+      <h5> <%= room.title %> </h5>
+      <% }); %>
   </body>
 </html>
