@@ -27,7 +27,7 @@ app.listen(app.get("port"), () => {
 });
 
 app.get("/chatrooms", homeController.showOverview);
-app.get("/contact", homeController.showSignIn);
+app.get("/contact", homeController.showSignUp);
 app.post("/contact", homeController.postedSignUp);
 
 // error handling
