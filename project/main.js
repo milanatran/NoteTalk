@@ -8,7 +8,7 @@
 const express = require("express"),
 app = express();
 const homeController = require("./controllers/homeController");
-//const layouts = require("express-ejs-layouts");
+const layouts = require("express-ejs-layouts");
 const errorController = require("./controllers/errorController");
 const Substribers = require("./models/user");
 
