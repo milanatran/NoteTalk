@@ -2,8 +2,8 @@ exports.showHomePage = (req, res) => {
   res.render("index");
 }
 
-exports.showSignIn = (req, res) => {
-  res.render("signIn");
+exports.showSignUp = (req, res) => {
+  res.render("signUp");
 }
 
 exports.postedSignUp = (req, res) => {
