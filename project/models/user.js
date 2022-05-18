@@ -4,4 +4,4 @@ const mongoose = require("mongoose"),
  email: String,
  password: String
 });
-module.exports = mongoose.model("Substribers", signUpSchema);
+module.exports = mongoose.model("Users", signUpSchema);

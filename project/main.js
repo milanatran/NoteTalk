@@ -10,11 +10,11 @@ app = express();
 const homeController = require("./controllers/homeController");
 const layouts = require("express-ejs-layouts");
 const errorController = require("./controllers/errorController");
-const Substribers = require("./models/user");
+const User = require("./models/user");
 
 app.set("view engine", "ejs");
 app.use(express.static("public"));
-//app.use(layouts);
+app.use(layouts);
 
 app.use(
   express.urlencoded({
@@ -51,7 +51,7 @@ db.once("open", () => {
 
 //create and save a user in a single step
 //TODO: dont accept signUps that dont match the schema
-Substribers.create(
+User.create(
 {
   username: "Milana Tran",
   email: "Milana.Tran@Student.htw-berlin.de",
@@ -64,5 +64,5 @@ console.log(savedDocument);
 );
 
 
-var findMilana = Substribers.findOne({username: "Milana Tran"}).where("email",/htw/);
-findMilana.exec();
+var findMilana = User.findOne({username: "Milana Tran"}).where("email",/htw/);
+findMilana.exec();+++++++++++++++++++++
