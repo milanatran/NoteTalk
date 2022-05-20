@@ -2,6 +2,11 @@ exports.showHomePage = (req, res) => {
   res.render("index");
 }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 382bc47888b34d9f53b1652414e86d605e9257b6
 exports.postedSignUp = (req, res) => {
   res.render("confirmMail");
 }
