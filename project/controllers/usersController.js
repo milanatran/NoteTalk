@@ -21,10 +21,13 @@ console.log("promise complete");
  });
 };
 
+<<<<<<< HEAD
 
 
 
 
+=======
+>>>>>>> d69995e1eb31cb6f2aaac0715b414ffa01946298
 exports.saveUser = (req, res) => {
  let newUser = new User({
  username: req.body.username,
@@ -43,3 +46,14 @@ exports.saveUser = (req, res) => {
 exports.showSignUp = (req, res) => {
   res.render("signUp");
 }
+<<<<<<< HEAD
+=======
+
+exports.showSignIn = (req, res) => {
+  res.render("signIn");
+}
+
+exports.showProfile = (req, res) => {
+  res.render("overview");
+}
+>>>>>>> d69995e1eb31cb6f2aaac0715b414ffa01946298

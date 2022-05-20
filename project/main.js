@@ -35,7 +35,12 @@ app.listen(app.get("port"), () => {
 
 app.get("/chatrooms", homeController.showOverview);
 app.get("/signUp", usersController.showSignUp);
+
+app.get("/signIn", usersController.showSignIn);
 app.post("/signUp", usersController.saveUser);
+app.post("/signIn", usersController.showProfile);
+app.post("/signUp", usersController.saveUser);
+
 
 
 app.get("/users", usersController.getAllUsers,(req, res, next) => {
