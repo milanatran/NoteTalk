@@ -34,11 +34,10 @@ app.listen(app.get("port"), () => {
 });
 
 app.get("/chatrooms", homeController.showOverview);
-<<<<<<< HEAD
 app.get("/contact", homeController.showSignUp);
 app.get("/signIn", homeController.showSignIn);
 app.post("/contact", homeController.postedSignUp);
-=======
+
 app.get("/signUp", usersController.showSignUp);
 app.post("/signUp", usersController.saveUser);
 
@@ -46,7 +45,6 @@ app.post("/signUp", usersController.saveUser);
 app.get("/users", usersController.getAllUsers,(req, res, next) => {
   res.render("users",{users: req.data});
   });
->>>>>>> 382bc47888b34d9f53b1652414e86d605e9257b6
 
 // error handling
 app.use(errorController.respondNoResourceFound);
@@ -65,10 +63,9 @@ db.once("open", () => {
 //TODO: dont accept signUps that dont match the schema
 
 
-<<<<<<< HEAD
 var findMilana = User.findOne({username: "Milana Tran"}).where("email",/htw/);
 findMilana.exec();
-=======
+
 // User.create(
 // {
 //   username: "Milana Tran",
@@ -84,4 +81,3 @@ findMilana.exec();
 //
 // var findMilana = User.findOne({username: "Milana Tran"}).where("email",/htw/);
 // findMilana.exec();
->>>>>>> 382bc47888b34d9f53b1652414e86d605e9257b6
