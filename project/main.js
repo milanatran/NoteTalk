@@ -34,6 +34,7 @@ app.listen(app.get("port"), () => {
 
 app.get("/chatrooms", homeController.showOverview);
 app.get("/contact", homeController.showSignUp);
+app.get("/signIn", homeController.showSignIn);
 app.post("/contact", homeController.postedSignUp);
 
 // error handling
@@ -65,4 +66,4 @@ console.log(savedDocument);
 
 
 var findMilana = User.findOne({username: "Milana Tran"}).where("email",/htw/);
-findMilana.exec();+++++++++++++++++++++
+findMilana.exec();
