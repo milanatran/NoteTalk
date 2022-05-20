@@ -2,14 +2,6 @@ exports.showHomePage = (req, res) => {
   res.render("index");
 }
 
-exports.showSignUp = (req, res) => {
-  res.render("signUp");
-}
-
-exports.showSignIn = (req, res) => {
-  res.render("signIn");
-}
-
 exports.postedSignUp = (req, res) => {
   res.render("confirmMail");
 }
