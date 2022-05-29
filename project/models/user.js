@@ -13,10 +13,12 @@ const mongoose = require("mongoose"),
  },
  password: {
    type:String,
-   required:true}
+   required:true
+ },
+ chatrooms: [{type: mongoose.Schema.Types.ObjectId, ref: "Chatroom"}]
 });
 
-module.exports = mongoose.model("Users", signUpSchema);
+module.exports = mongoose.model("User", signUpSchema);
 
 //TODO: think about removing the password, admins also shoouldnt know about it
 signUpSchema.methods.getInfo = function() {

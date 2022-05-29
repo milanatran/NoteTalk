@@ -34,7 +34,7 @@ app.listen(app.get("port"), () => {
 });
 
 app.get("/chatrooms", homeController.showOverview);
-app.get("/contact", homeController.showSignUp);
+app.get("/contact", usersController.showSignUp);
 app.get("/signIn", homeController.showSignIn);
 app.post("/contact", homeController.postedSignUp);
 
@@ -62,9 +62,8 @@ db.once("open", () => {
 //create and save a user in a single step
 //TODO: dont accept signUps that dont match the schema
 
-
-var findMilana = User.findOne({username: "Milana Tran"}).where("email",/htw/);
-findMilana.exec();
+//var findMilana = User.findOne({username: "Milana Tran"}).where("email",/htw/);
+//findMilana.exec();
 
 // User.create(
 // {
