@@ -1,17 +1,3 @@
-exports.showHomePage = (req, res) => {
-  res.render("index");
-}
-
-
-
-exports.showSignIn = (req, res) => {
-  res.render("signIn");
-}
-
-exports.postedSignUp = (req, res) => {
-  res.render("confirmMail");
-}
-
 var room = [
  {
  title: "Project NoteTalk"
@@ -23,8 +9,12 @@ var room = [
  title: "Family Chat"
  }
 ];
-exports.showOverview = (req, res) => {
- res.render("overview", {
- chatrooms: room
- });
+
+module.exports = {
+  showChatrooms: (req, res) => {
+    res.render("overview", {chatrooms: room});
+  },
+  showHomePage: (req, res) =>  {
+    res.render("index");
+  }
 };

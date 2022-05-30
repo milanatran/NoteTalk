@@ -1,32 +1,40 @@
-const mongoose = require("mongoose"),
- signUpSchema = mongoose.Schema({
- username: {
-   type:String,
-   required:true,
-   unique:true,},
+const mongoose = require("mongoose");
+const {Schema} = mongoose;
+const userSchema = new Schema(
+   {
+     name: {
+       type:String,
+     },
 
- email: {
-   type:String,
-   required:true,
-   lowercase: true,
-   unique:true,
- },
- password: {
-   type:String,
-   required:true
- },
- chatrooms: [{type: mongoose.Schema.Types.ObjectId, ref: "Chatroom"}]
-});
+     email: {
+       type:String,
+       required:true,
+       lowercase: true,
+       unique:true,
+     },
 
-module.exports = mongoose.model("User", signUpSchema);
+     password: {
+       type:String,
+       required:true
+     },
+
+     chatrooms: [{type: mongoose.Schema.Types.ObjectId, ref: "Chatroom"}],
+    },{
+     timestamps: true
+    }
+);
+
+
 
 //TODO: think about removing the password, admins also shoouldnt know about it
-signUpSchema.methods.getInfo = function() {
- return `Username: ${this.username} Email: ${this.email} Password: ${this.password}`;
+userSchema.methods.getInfo = function() {
+ return `name: ${this.name} Email: ${this.email} Password: ${this.password}`;
 };
 
-signUpSchema.methods.findUser = function() {
+userSchema.methods.findUser = function() {
  return this.model("User")
- .findOne({username: this.username})
+ .findOne({name: this.name})
  .exec();
 };
+
+module.exports = mongoose.model("User", userSchema);

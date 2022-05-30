@@ -1,0 +1,18 @@
+<h2>Users Table</h2>
+<table class="table">
+ <thead>
+ <tr>
+<th>Name</th>
+<th>Email</th>
+ </tr>
+ </thead>
+ <tbody>
+ <% users.forEach(user => { %>
+ <tr>
+   <!-- TODO: name wird nicht angezeigt! ÄNDERN! -->
+<td><%= user.name %></td>
+<td><%= user.email %></td>
+ </tr>
+ <% }); %>
+ </tbody>
+</table>

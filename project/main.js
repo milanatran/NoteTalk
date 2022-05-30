@@ -33,14 +33,14 @@ app.listen(app.get("port"), () => {
   );
 });
 
-app.get("/chatrooms", homeController.showOverview);
+app.get("/chatrooms", homeController.showChatrooms);
 app.get("/contact", usersController.showSignUp);
-app.get("/signIn", homeController.showSignIn);
-app.post("/contact", homeController.postedSignUp);
+app.get("/signIn", usersController.showSignIn);
+app.post("/contact", usersController.postedSignUp);
 
 app.get("/signUp", usersController.showSignUp);
 app.post("/signUp", usersController.saveUser);
-
+app.get("/users", usersController.index);
 
 app.get("/users", usersController.getAllUsers,(req, res, next) => {
   res.render("users",{users: req.data});
@@ -57,17 +57,17 @@ db.once("open", () => {
  console.log("Successfully connected to MongoDB using Mongoose!");
 });
 
-//const User = mongoose.model("User", signUpSchema);
+//const User = mongoose.model("User", userSchema);
 
 //create and save a user in a single step
 //TODO: dont accept signUps that dont match the schema
 
-//var findMilana = User.findOne({username: "Milana Tran"}).where("email",/htw/);
+//var findMilana = User.findOne({name: "Milana Tran"}).where("email",/htw/);
 //findMilana.exec();
 
 // User.create(
 // {
-//   username: "Milana Tran",
+//   name: "Milana Tran",
 //   email: "Milana.Tran@Student.htw-berlin.de",
 //   password: 1234
 // },
@@ -78,5 +78,5 @@ db.once("open", () => {
 // );
 //
 //
-// var findMilana = User.findOne({username: "Milana Tran"}).where("email",/htw/);
+// var findMilana = User.findOne({name: "Milana Tran"}).where("email",/htw/);
 // findMilana.exec();

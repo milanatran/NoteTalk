@@ -7,17 +7,17 @@ const mongoose = require("mongoose"),
 mongoose.connection;
 var contacts = [
  {
- username: "Jon Wexler",
+ name: "Jon Wexler",
  email: "jon@jonwexler.com",
  password: 10016
  },
  {
- username: "Chef Eggplant",
+ name: "Chef Eggplant",
  email: "eggplant@recipeapp.com",
  password: 20331
  },
  {
- username: "Professor Souffle",
+ name: "Professor Souffle",
  email: "souffle@recipeapp.com",
  password: 19103
  }
@@ -30,7 +30,7 @@ User.deleteMany()
 var commands = [];
 contacts.forEach((c) => {
  commands.push(User.create({
-username: c.username,
+name: c.name,
 email: c.email
  }));
 });
