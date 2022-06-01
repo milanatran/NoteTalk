@@ -5,7 +5,7 @@
   "mongodb://localhost:27017/NoteTalk_db",
   {useNewUrlParser: true}
  );
-mongoose.Promise= global.Promise;
+mongoose.Prmise= global.Promise;
 const express = require("express"),
 app = express();
 const homeController = require("./controllers/homeController");

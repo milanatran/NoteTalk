@@ -1,7 +1,7 @@
 const mongoose = require("mongoose"),
- User = require("./models/User");
+ User = require("./models/user");
  mongoose.connect(
- "mongodb://localhost:27017/recipe_db",
+ "mongodb://localhost:27017/NoteTalk_db",
  { useNewUrlParser: true }
 );
 mongoose.connection;
@@ -31,7 +31,8 @@ var commands = [];
 contacts.forEach((c) => {
  commands.push(User.create({
 name: c.name,
-email: c.email
+email: c.email,
+password: c.password
  }));
 });
 Promise.all(commands)
