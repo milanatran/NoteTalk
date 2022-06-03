@@ -11,9 +11,6 @@ var room = [
 ];
 
 module.exports = {
-  showChatrooms: (req, res) => {
-    res.render("overview", {chatrooms: room});
-  },
   showHomePage: (req, res) =>  {
     res.render("index");
   }

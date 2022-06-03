@@ -6,16 +6,21 @@ mongoose.connect(
 const User = require("../models/user");
 
 module.exports =  {
-    index: (req, res) => {
-      User.find({}).then(users => {
-        res.render("users/index", {
-          users: users
-        })
+
+    index: (req, res, next) => {
+      User.find()
+      .then(users => {
+        res.locals.users = users;
+        next();
       })
       .catch(error => {
-          console.log(`Error fetching users: ${error.message}`)
-        res.redirect("/");
+        console.log(`Error fetching users: ${error.message}`);
+        next(error);
       });
+     },
+
+    indexView: (req, res) => {
+     res.render("users/index");
     },
 
     getAllUsers:  (req, res, next) => {
@@ -58,11 +63,39 @@ module.exports =  {
     res.render("signIn");
   },
 
-  showProfile: (req, res) => {
-    res.render("overview");
+  showChatrooms: (req, res) => {
+    res.render("overview", {chatrooms: room});
   },
 
   postedSignUp: (req, res) => {
     res.render("confirmMail");
+  },
+
+  new: (req, res) => {
+    res.render("users/new");
+  },
+
+  create: (req, res, next) => {
+    let userParams = {
+      name: req.body.name,
+      email: req.body.email,
+      password: req.body.password,
+    };
+    User.create(userParams)
+    .then(user => {
+      res.locals.redirect = "/users";
+      res.locals.user = user;
+      next();
+    })
+    .catch(error => {
+      console.log(`Error saving user: ${error.message}`);
+      next(error);
+    });
+  },
+  
+  redirectView: (req, res, next) => {
+   let redirectPath = res.locals.redirect;
+   if (redirectPath) res.redirect(redirectPath);
+   else next();
   }
 };
