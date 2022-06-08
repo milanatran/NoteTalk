@@ -1,0 +1,30 @@
+<h1>User Data for <%= user.name %></h1>
+<table class="table">
+ <tr>
+   <th>Name</th>
+   <td><%= user.name %></td>
+ </tr>
+ <tr>
+   <th>Email</th>
+   <td><%= user.email %></td>
+ </tr>
+ <tr>
+   <th>Password</th>
+   <td><%= user.password %></td>
+ </tr>
+</table>
+
+<table class="table">
+ <thead>
+   <tr>
+     <th>Chatrooms</th>
+   </tr>
+ </thead>
+ <tbody>
+   <% user.chatrooms.forEach(chatroom => { %>
+     <tr>
+      <td><%= chatroom.title %></td>
+     </tr>
+   <% }); %>
+ </tbody>
+</table>

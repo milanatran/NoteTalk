@@ -5,6 +5,10 @@ const mongoose = require("mongoose"),
  { useNewUrlParser: true }
 );
 mongoose.connection;
+const Chatroom = require("./models/chatroom");
+
+
+
 var contacts = [
  {
  name: "Jon Wexler",
@@ -35,6 +39,31 @@ email: c.email,
 password: c.password
  }));
 });
+var testRoom;
+var testUser;
+
+Chatroom.create( {
+ chatroomPath: "hqe373",
+ title: "Tomato Land",
+}).then(chatroom => testRoom = chatroom);
+User.findOne({name: "Jon Wexler"}).then(
+ user => testUser = user
+);
+testUser.chatrooms.push(testRoom);
+testUser.save();
+User.populate(testUser, "chatrooms");
+
+Chatroom.create( {
+ chatroomPath: "khdgz37",
+ title: "HTW Chatroom",
+}).then(chatroom => testRoom = chatroom);
+User.findOne({name: "Jon Wexler"}).then(
+ user => testUser = user
+);
+testUser.chatrooms.push(testRoom);
+testUser.save();
+User.populate(testUser, "chatrooms");
+
 Promise.all(commands)
  .then(r => {
  console.log(JSON.stringify(r));

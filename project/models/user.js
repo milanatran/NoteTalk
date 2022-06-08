@@ -36,5 +36,10 @@ userSchema.methods.findUser = function() {
  .findOne({name: this.name})
  .exec();
 };
+userSchema.methods.findUserByEmail = function() {
+ return this.model("User")
+ .findOne({email: this.email})
+ .exec();
+};
 
 module.exports = mongoose.model("User", userSchema);

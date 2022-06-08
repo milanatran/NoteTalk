@@ -5,6 +5,18 @@ mongoose.connect(
 );
 const User = require("../models/user");
 
+var room = [
+ {
+ title: "Project NoteTalk"
+ },
+ {
+ title: "IMI Spam"
+ },
+ {
+ title: "Family Chat"
+ }
+];
+
 module.exports =  {
     index: (req, res) => {
       User.find({}).then(users => {
@@ -50,6 +62,10 @@ module.exports =  {
     });
   },
 
+  showChatrooms: (req, res) => {
+    res.render("overview", {chatrooms: room});
+  },
+
   showSignUp: (req, res) => {
     res.render("signUp");
   },
@@ -64,5 +80,49 @@ module.exports =  {
 
   postedSignUp: (req, res) => {
     res.render("confirmMail");
+  },
+
+  new: (req, res) => {
+    res.render("users/new");
+  },
+
+  create: (req, res, next) => {
+     let userParams = {
+       name: req.body.name,
+       email: req.body.email,
+       password: req.body.password,
+     };
+
+     User.create(userParams)
+    .then(user => {
+      res.locals.redirect = "/confirmMail";
+      res.locals.user = user;
+      next();
+    })
+    .catch(error => {
+      console.log(`Error saving user: ${error.message}`);
+      next(error);
+    });
+  },
+
+  redirectView: (req, res, next) => {
+   let redirectPath = res.locals.redirect;
+   if (redirectPath) res.redirect(redirectPath);
+   else next();
+ },
+
+   show: (req, res, next) => {
+     let userEmail = req.body.email;
+
+     User.findOne({email:userEmail})
+     .then(result=> {res.locals.user =result; console.log(result);next();})
+     .catch(error => {
+      console.log(`Error fetching user by ID: ${error.message}`);
+      next(error);
+    });
+   },
+
+  showView: (req, res) => {
+   res.render("users/show");
   }
 };
