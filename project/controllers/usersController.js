@@ -113,9 +113,10 @@ module.exports =  {
 
    show: (req, res, next) => {
      let userEmail = req.body.email;
-
+     console.log(userEmail);
+     console.log(req.body);
      User.findOne({email:userEmail})
-     .then(result=> {res.locals.user =result; console.log(result);next();})
+     .then(result=> {res.locals.user =result; next();})
      .catch(error => {
       console.log(`Error fetching user by ID: ${error.message}`);
       next(error);
