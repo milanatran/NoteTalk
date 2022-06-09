@@ -1,4 +1,4 @@
- "use strict";
+"use strict";
 
 const mongoose = require("mongoose");
 const express = require("express");
@@ -8,13 +8,16 @@ const homeController = require("./controllers/homeController");
 const layouts = require("express-ejs-layouts");
 const errorController = require("./controllers/errorController");
 const usersController = require("./controllers/usersController");
-const db = mongoose.connection;
+const router = express.Router();
 
+// Database
+mongoose.Promise = global.Promise;
 mongoose.connect(
- "mongodb://localhost:27017/NoteTalk_db",
- {useNewUrlParser: true}
+"mongodb://localhost:27017/NoteTalk_db",
+{useNewUrlParser: true}
 );
-mongoose.Promise= global.Promise;
+
+const db = mongoose.connection;
 
 db.once("open", () => {
  console.log("Successfully connected to MongoDB using Mongoose!");
@@ -53,6 +56,12 @@ router.use(errorController.respondNoResourceFound);
 router.use(errorController.respondInternalError);
 
 app.use("/", router);
+
+
+
+// Error handling
+app.use(errorController.respondNoResourceFound);
+app.use(errorController.respondInternalError);
 
 app.listen(app.get("port"), () => {
   console.log(

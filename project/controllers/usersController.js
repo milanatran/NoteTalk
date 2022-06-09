@@ -18,16 +18,21 @@ var room = [
 ];
 
 module.exports =  {
-    index: (req, res) => {
-      User.find({}).then(users => {
-        res.render("users/index", {
-          users: users
-        })
+
+    index: (req, res, next) => {
+      User.find()
+      .then(users => {
+        res.locals.users = users;
+        next();
       })
       .catch(error => {
-          console.log(`Error fetching users: ${error.message}`)
-        res.redirect("/");
+        console.log(`Error fetching users: ${error.message}`);
+        next(error);
       });
+     },
+
+    indexView: (req, res) => {
+     res.render("users/index");
     },
 
     getAllUsers:  (req, res, next) => {
@@ -74,8 +79,8 @@ module.exports =  {
     res.render("signIn");
   },
 
-  showProfile: (req, res) => {
-    res.render("overview");
+  showChatrooms: (req, res) => {
+    res.render("overview", {chatrooms: room});
   },
 
   postedSignUp: (req, res) => {
