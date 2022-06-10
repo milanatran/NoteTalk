@@ -119,11 +119,10 @@ module.exports =  {
 
    show: (req, res, next) => {
      let userEmail = req.body.email;
-     console.log(userEmail);
-     console.log(req.body);
+
      User.findOne({email:userEmail})
      .populate("chatrooms")
-     .then(result=> {res.locals.user = result; console.log(`userdata: ${result} `); next();})
+     .then(result=> {res.locals.user = result;next();})
      .catch(error => {
       console.log(`Error fetching user by ID: ${error.message}`);
       next(error);
@@ -132,5 +131,6 @@ module.exports =  {
 
   showView: (req, res) => {
    res.render("users/show");
-  }
+ },
+
 };
