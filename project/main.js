@@ -8,7 +8,6 @@ const homeController = require("./controllers/homeController");
 const layouts = require("express-ejs-layouts");
 const errorController = require("./controllers/errorController");
 const usersController = require("./controllers/usersController");
-const router = express.Router();
 
 // Database
 mongoose.Promise = global.Promise;
