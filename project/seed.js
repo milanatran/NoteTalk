@@ -35,12 +35,12 @@ var testUser2;
 var commands = [];
 console.log("start create");
 
-User.deleteMany()
+User.deleteMany({})
  .exec()
  .then(() => {
  console.log("User data is empty!");
 
- Chatroom.deleteMany()
+ Chatroom.deleteMany({})
   .exec()
   .then(() => {
   console.log("Chatroom data is empty!");
@@ -56,6 +56,7 @@ Chatroom.create( {
 console.log("chatroom created");
 
   contacts.forEach((c) => {
+    console.log(c);
    commands.push(User.create({
   name: c.name,
   email: c.email,
