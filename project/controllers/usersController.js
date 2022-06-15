@@ -120,7 +120,7 @@ module.exports =  {
      let userEmail = req.body.email;
      console.log(userEmail);
      console.log(req.body);
-     User.findOne({email:userEmail})
+     User.findOne({email: userEmail})
      .then(result=> {User.populate(result,"chatrooms").then(res.locals.user = result); console.log(`userdata: ${result} `); next();})
      .catch(error => {
       console.log(`Error fetching user by ID: ${error.message}`);
