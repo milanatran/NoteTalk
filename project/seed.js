@@ -81,9 +81,6 @@ console.log("chatroom created");
    .catch(error => {
      console.log(`ERROR: ${error}`);
    });
-
-
-
 })
 .catch(error => {console.log(error)});
 });
