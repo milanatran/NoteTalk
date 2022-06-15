@@ -113,16 +113,16 @@ module.exports =  {
 
   redirectView: (req, res, next) => {
    let redirectPath = res.locals.redirect;
+   res.locals.user = res.locals.user;
    if (redirectPath) res.redirect(redirectPath);
    else next();
  },
 
    show: (req, res, next) => {
      let userEmail = req.body.email;
-
      User.findOne({email:userEmail})
      .populate("chatrooms")
-     .then(result=> {res.locals.user = result;next();})
+     .then(result=> {res.locals.user = result;res.locals.redirect=`../users/${result._id}`; next();})
      .catch(error => {
       console.log(`Error fetching user by ID: ${error.message}`);
       next(error);
@@ -132,5 +132,56 @@ module.exports =  {
   showView: (req, res) => {
    res.render("users/show");
  },
+
+ loadUserById:(req, res, next) => {
+   let userId = req.params.id;
+  User.findById(userId)
+   .populate("chatrooms")
+   .then(result=> {res.locals.user = result;next();})
+   .catch(error => {
+    console.log(`Error fetching user by ID: ${error.message}`);
+    next(error);
+   });
+},
+
+ edit:(req, res) => {
+  res.render("users/edit");
+},
+
+
+update: (req, res, next) => {
+   let userId = req.params.id,
+   userParams = {
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+   };
+   User.findByIdAndUpdate(userId, {
+     $set: userParams
+   })
+  .then(user => {
+    console.log(user);
+    res.locals.user = user;
+    res.locals.redirect=`/users/${user._id}`;
+    next();
+  })
+  .catch(error => {
+    console.log(`Error updating user by ID: ${error.message}`);
+    next(error);
+  });
+},
+
+delete: (req, res, next) => {
+   let userId = req.params.id;
+   User.findByIdAndRemove(userId)
+    .then(() => {
+      res.locals.redirect = "/";
+      next();
+      })
+    .catch(error => {
+  console.log(`Error deleting user by ID: ${error.message}`);
+  next();
+  });
+}
 
 };

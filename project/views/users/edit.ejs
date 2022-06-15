@@ -1,0 +1,13 @@
+
+<div class="data-form">
+ <form method="POST" action="<%=`/users/${user._id}/update?_method=PUT`%>">
+<h2>Edit user:</h2>
+ <label for="inputFirstName">Name</label>
+ <input type="text" name="name" id="inputName" value="<%=user.name %>" placeholder="Name" autofocus>
+<label for="inputPassword">Password</label>
+ <input type="password" name="password" id="inputPassword"value="<%= user.password %>" placeholder="Password" required>
+<label for="inputEmail">Email address</label>
+ <input type="email" name="email" id="inputEmail" value="<%=user.email %>" placeholder="Email address" required>
+<button type="submit">Update</button>
+</form>
+</div>
