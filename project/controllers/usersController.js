@@ -18,6 +18,14 @@ var room = [
  }
 ];
 
+const getUserParams = (body) => {
+ return {
+name: body.name,
+email: body.email,
+password: body.password
+ };
+ };
+
 module.exports =  {
 
     index: (req, res, next) => {
@@ -54,22 +62,24 @@ module.exports =  {
    },
 
    saveUser: (req, res) => {
-    let newUser = new User({
-    name: req.body.name,
-    email: req.body.email,
-    password: req.body.password
-    });
-    newUser.save()
+    User.create(getUserParams(req.body))
     .then(result => {
   //  res.render("confirmMail");
       req.flash("success", `${result.name}'s account created successfully!`);
-      res.locals.redirect = ``/users/${user._id}`;
-      res.locals.user = user;
+      res.locals.redirect = `/confirmMail`;
+      res.locals.user =result;
+      console.log("hi");
       next();
     })
     .catch(error => {
-    if (error) res.send(error);
-    });
+      console.log(`Error saving user: ${error.message}`);
+      res.locals.redirect = "/users/new";
+      req.flash(
+        "error",
+        `Failed to create user account because: ${error.message}.`
+      );
+      next();
+      });
   },
 
   showChatrooms: (req, res) => {
@@ -110,7 +120,7 @@ module.exports =  {
       res.locals.redirect = "/users/new";
       req.flash(
         "error",
-        `Failed to create user account because: ➥${error.message}.`
+        `Failed to create user account because: ${error.message}.`
       );
       next();
    });
@@ -118,7 +128,7 @@ module.exports =  {
 
   redirectView: (req, res, next) => {
    let redirectPath = res.locals.redirect;
-   res.locals.user = res.locals.user;
+   console.log(redirectPath);
    if (redirectPath) res.redirect(redirectPath);
    else next();
  },
@@ -127,11 +137,30 @@ module.exports =  {
      let userEmail = req.body.email;
      User.findOne({email:userEmail})
      .populate("chatrooms")
-     .then(result=> {res.locals.user = result;res.locals.redirect=`../users/${result._id}`; next();})
-     .catch(error => {
-      console.log(`Error fetching user by ID: ${error.message}`);
-      next(error);
-    });
+     .then(user => {
+        if (user) {
+        user.passwordComparison(req.body.password)
+        .then(passwordsMatch => {
+          if (passwordsMatch) {
+             res.locals.redirect = `/users/${user._id}`;
+            req.flash("success", `${user.name}'s logged in successfully!`);
+            res.locals.user = user;
+          } else {
+            req.flash("error", "Failed to log in user account: Incorrect Password.");
+            res.locals.redirect = "/signIn";
+          }
+          next();
+          });
+      } else {
+        req.flash("error", "Failed to log in user account: User account not found.");
+        res.locals.redirect = "/signIn";
+        next();
+       }
+       })
+      .catch(error => {
+         console.log(`Error logging in user: ${error.message}`);
+         next(error);
+      });
    },
 
   showView: (req, res) => {
@@ -187,6 +216,29 @@ delete: (req, res, next) => {
   console.log(`Error deleting user by ID: ${error.message}`);
   next();
   });
+},
+
+validate: (req, res, next) => {
+ req.sanitizeBody("email").normalizeEmail({
+   all_lowercase: true
+ }).trim();
+ req.check("email", "Email is invalid").isEmail();
+ req.check("name", "name  is invalid").notEmpty().isString().isLength({
+   min: 1,
+   max: 25
+ }).equals(req.body.name);
+ req.check("password", "Password cannot be empty").notEmpty();
+ req.getValidationResult().then((error) => {
+  if (!error.isEmpty()) {
+    let messages = error.array().map(e => e.msg);
+    req.skip = true;
+    req.flash("error", messages.join(" and "));
+    res.locals.redirect = "/signUp";
+    next();
+  } else {
+   next();
+  }
+ });
 }
 
 };

@@ -12,7 +12,7 @@ const methodOverride = require("method-override");
 const expressSession = require("express-session"),
  cookieParser = require("cookie-parser"),
  connectFlash = require("connect-flash");
-
+const expressValidator = require("express-validator");
 
 // Database
 mongoose.Promise = global.Promise;
@@ -38,6 +38,7 @@ router.use(
   })
 );
 router.use(express.json());
+router.use(expressValidator());
 
 router.use(methodOverride("_method", {
  methods: ["POST", "GET"]
@@ -66,7 +67,7 @@ router.get("/signIn", usersController.showSignIn);
 router.post("/signIn", usersController.show, usersController.redirectView);
 router.get("/users/:id",usersController.loadUserById,usersController.showView);
 router.get("/signUp", usersController.showSignUp);
-router.post("/signUp", usersController.saveUser);
+router.post("/signUp",usersController.validate, usersController.saveUser,usersController.redirectView);//, usersController.postedSignUp
 router.get("/users", usersController.index);
 router.get("/users", usersController.getAllUsers,(req, res, next) => {
   res.render("users",{users: req.data});
