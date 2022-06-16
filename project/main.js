@@ -9,6 +9,9 @@ const layouts = require("express-ejs-layouts");
 const errorController = require("./controllers/errorController");
 const usersController = require("./controllers/usersController");
 const methodOverride = require("method-override");
+const expressSession = require("express-session"),
+ cookieParser = require("cookie-parser"),
+ connectFlash = require("connect-flash");
 
 
 // Database
@@ -39,6 +42,21 @@ router.use(express.json());
 router.use(methodOverride("_method", {
  methods: ["POST", "GET"]
 }));
+
+router.use(cookieParser("secret_passcode"));
+router.use(expressSession({
+ secret: "secret_passcode",
+ cookie: {
+ maxAge: 4000000
+ },
+ resave: false,
+ saveUninitialized: false
+}));
+router.use(connectFlash());
+router.use((req, res, next) => {
+ res.locals.flashMessages = req.flash();
+ next();
+});
 
 router.get("/", homeController.showHomePage);
 

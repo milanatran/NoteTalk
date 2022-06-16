@@ -1,12 +1,13 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
-  <head>
-    <meta charset="utf-8">
-    <title></title>
-  </head>
-  <body>
-     <%- include ('partials/navigation.ejs') %>
-     <%- body %>
-     <div id="footer">FOOTER</div>
-  </body>
-</html>
+<%- include ('partials/navigation.ejs') %>
+
+<div class="flashes">
+  <% if (flashMessages) { %>
+    <% if (flashMessages.success) { %>
+      <div class="flash success"><%= flashMessages.success %></div>
+    <% } else if (flashMessages.error) { %>
+      <div class="flash error"><%= flashMessages.error %></div>
+    <% } %>
+  <% } %>
+</div>
+<%- body %>
+<div id="footer">FOOTER blabla </div>

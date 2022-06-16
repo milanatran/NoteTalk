@@ -61,7 +61,11 @@ module.exports =  {
     });
     newUser.save()
     .then(result => {
-    res.render("confirmMail");
+  //  res.render("confirmMail");
+      req.flash("success", `${result.name}'s account created successfully!`);
+      res.locals.redirect = ``/users/${user._id}`;
+      res.locals.user = user;
+      next();
     })
     .catch(error => {
     if (error) res.send(error);
@@ -93,22 +97,23 @@ module.exports =  {
   },
 
   create: (req, res, next) => {
-     let userParams = {
-       name: req.body.name,
-       email: req.body.email,
-       password: req.body.password,
-     };
-
-     User.create(userParams)
-    .then(user => {
-      res.locals.redirect = "/confirmMail";
+   let userParams = getUserParams(req.body);
+   User.create(userParams)
+   .then(user => {
+      req.flash("success", `${user.name}'s account created successfully!`);
+      res.locals.redirect = "/users";
       res.locals.user = user;
       next();
-    })
-    .catch(error => {
+   })
+   .catch(error => {
       console.log(`Error saving user: ${error.message}`);
-      next(error);
-    });
+      res.locals.redirect = "/users/new";
+      req.flash(
+        "error",
+        `Failed to create user account because: ➥${error.message}.`
+      );
+      next();
+   });
   },
 
   redirectView: (req, res, next) => {
