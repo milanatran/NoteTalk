@@ -61,7 +61,7 @@ module.exports =  {
      });
    },
 
-   saveUser: (req, res) => {
+   saveUser: (req, res, next) => {
     User.create(getUserParams(req.body))
     .then(result => {
   //  res.render("confirmMail");
@@ -78,7 +78,7 @@ module.exports =  {
         "error",
         `Failed to create user account because: ${error.message}.`
       );
-      next();
+      next(error);
       });
   },
 
