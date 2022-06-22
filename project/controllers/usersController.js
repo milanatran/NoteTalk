@@ -68,12 +68,11 @@ module.exports =  {
       req.flash("success", `${result.name}'s account created successfully!`);
       res.locals.redirect = `/confirmMail`;
       res.locals.user =result;
-      console.log("hi");
       next();
     })
     .catch(error => {
       console.log(`Error saving user: ${error.message}`);
-      res.locals.redirect = "/users/new";
+      res.locals.redirect = "/";
       req.flash(
         "error",
         `Failed to create user account because: ${error.message}.`
@@ -222,7 +221,7 @@ validate: (req, res, next) => {
  req.sanitizeBody("email").normalizeEmail({
    all_lowercase: true
  }).trim();
- req.check("email", "Email is invalid").isEmail();
+ req.check("email", "Email is invalid").notEmpty().isEmail();
  req.check("name", "name  is invalid").notEmpty().isString().isLength({
    min: 1,
    max: 25
@@ -233,7 +232,7 @@ validate: (req, res, next) => {
     let messages = error.array().map(e => e.msg);
     req.skip = true;
     req.flash("error", messages.join(" and "));
-    res.locals.redirect = "/signUp";
+    res.locals.redirect = "/";
     next();
   } else {
    next();
