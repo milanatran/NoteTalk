@@ -9,10 +9,18 @@ const layouts = require("express-ejs-layouts");
 const errorController = require("./controllers/errorController");
 const usersController = require("./controllers/usersController");
 const methodOverride = require("method-override");
-const expressSession = require("express-session"),
- cookieParser = require("cookie-parser"),
- connectFlash = require("connect-flash");
+const expressSession = require("express-session");
+const cookieParser = require("cookie-parser");
+const connectFlash = require("connect-flash");
 const expressValidator = require("express-validator");
+const passport = require("passport");
+router.use(passport.initialize());
+router.use(passport.session());
+
+const User = require("./models/user");
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 // Database
 mongoose.Promise = global.Promise;
@@ -83,8 +91,6 @@ router.use(errorController.respondNoResourceFound);
 router.use(errorController.respondInternalError);
 
 app.use("/", router);
-
-
 
 // Error handling
 app.use(errorController.respondNoResourceFound);

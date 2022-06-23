@@ -62,23 +62,36 @@ module.exports =  {
    },
 
    saveUser: (req, res, next) => {
-    User.create(getUserParams(req.body))
-    .then(result => {
-  //  res.render("confirmMail");
-      req.flash("success", `${result.name}'s account created successfully!`);
-      res.locals.redirect = `/confirmMail`;
-      res.locals.user =result;
-      next();
-    })
-    .catch(error => {
-      console.log(`Error saving user: ${error.message}`);
-      res.locals.redirect = "/";
-      req.flash(
-        "error",
-        `Failed to create user account because: ${error.message}.`
-      );
-      next(error);
-      });
+     if (req.skip) next();
+     let newUser = new User(getUserParams(req.body));
+
+     User.register(newUser, req.body.password, (error, user) => {
+       if (user) {
+         req.flash("success", `${user.name}'s account created successfully!`);
+         res.locals.redirect = "/confirmMail";
+         next();
+       } else {
+         req.flash("error", `Failed to create user account because: ${error.message}.`);
+         res.locals.redirect = "/signUp";
+         next();
+       }
+     });
+    // User.create(getUserParams(req.body))
+    // .then(result => {
+    //   req.flash("success", `${result.name}'s account created successfully!`);
+    //   res.locals.redirect = `/confirmMail`;
+    //   res.locals.user = result;
+    //   next();
+    // })
+    // .catch(error => {
+    //   console.log(`Error saving user: ${error.message}`);
+    //   res.locals.redirect = "/";
+    //   req.flash(
+    //     "error",
+    //     `Failed to create user account because: ${error.message}.`
+    //   );
+    //   next(error);
+    //   });
   },
 
   showChatrooms: (req, res) => {
