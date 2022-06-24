@@ -266,7 +266,7 @@ validate: (req, res, next) => {
     let messages = error.array().map(e => e.msg);
     req.skip = true;
     req.flash("error", messages.join(" and "));
-    res.locals.redirect = "/";
+    res.locals.redirect = "/signUp";
     next();
   } else {
    next();
