@@ -5,6 +5,7 @@ mongoose.connect(
 );
 const User = require("../models/user");
 const Chatroom = require("../models/chatroom");
+ const passport = require("passport") ;
 
 var room = [
  {
@@ -144,6 +145,26 @@ module.exports =  {
    if (redirectPath) res.redirect(redirectPath);
    else next();
  },
+
+//flash messages do not work
+ authenticate: passport.authenticate("local", {
+ failureRedirect: "/signIn",
+ failureFlash: "Failed to login.",
+ successRedirect: "/",
+ successFlash: "Logged in!"
+}),
+
+logout: (req, res, next) => {
+ req.logout(function(err) {
+   if (err) { return next(err); }
+ });
+ req.flash("success", "You have been logged out!");
+ res.locals.redirect = "/";
+ next();
+},
+
+
+
 
    show: (req, res, next) => {
      let userEmail = req.body.email;

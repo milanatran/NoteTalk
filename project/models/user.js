@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
-
+const passportLocalMongoose = require("passport-local-mongoose");
 const {Schema} = mongoose;
 const userSchema = new Schema(
    {
@@ -26,7 +26,7 @@ const userSchema = new Schema(
     }
 );
 
-const passportLocalMongoose = require("passport-local-mongoose");
+
 userSchema.plugin(passportLocalMongoose, {
  usernameField: "email"
 });
@@ -53,7 +53,7 @@ userSchema.plugin(passportLocalMongoose, {
 
 //TODO: think about removing the password, admins also shoouldnt know about it
 userSchema.methods.getInfo = function() {
- return `name: ${this.name} Email: ${this.email} Password: ${this.password}`;
+ return `name: ${this.name} Email: ${this.email}  `;
 };
 
 userSchema.methods.findUser = function() {

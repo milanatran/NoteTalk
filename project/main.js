@@ -13,14 +13,10 @@ const expressSession = require("express-session");
 const cookieParser = require("cookie-parser");
 const connectFlash = require("connect-flash");
 const expressValidator = require("express-validator");
-const passport = require("passport");
-router.use(passport.initialize());
-router.use(passport.session());
-
 const User = require("./models/user");
-passport.use(User.createStrategy());
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+const passport = require("passport");
+
+
 
 // Database
 mongoose.Promise = global.Promise;
@@ -52,6 +48,7 @@ router.use(methodOverride("_method", {
  methods: ["POST", "GET"]
 }));
 
+//sessions for not having to logain al the time
 router.use(cookieParser("secret_passcode"));
 router.use(expressSession({
  secret: "secret_passcode",
@@ -62,21 +59,37 @@ router.use(expressSession({
  saveUninitialized: false
 }));
 router.use(connectFlash());
+
+
+router.use(passport.initialize());
+router.use(passport.session());
+
+//data security
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
+//every request   uses that
 router.use((req, res, next) => {
  res.locals.flashMessages = req.flash();
+ res.locals.loggedIn = req.isAuthenticated();
+ res.locals.currentUser = req.user;
  next();
 });
 
+//routes
 router.get("/", homeController.showHomePage);
 
 router.get("/confirmMail", usersController.postedSignUp);
 router.get("/chatrooms", usersController.showChatrooms);
 router.get("/signIn", usersController.showSignIn);
-router.post("/signIn", usersController.show, usersController.redirectView);
-router.get("/users/:id",usersController.loadUserById,usersController.showView);
+router.post("/signIn", usersController.authenticate);
 router.get("/signUp", usersController.showSignUp);
 router.post("/signUp",usersController.validate, usersController.saveUser,usersController.redirectView);//, usersController.postedSignUp
+router.get("/users/logout", usersController.logout, usersController.redirectView);
+router.get("/users/:id",usersController.loadUserById,usersController.showView);
 router.get("/users", usersController.index);
+
 router.get("/users", usersController.getAllUsers,(req, res, next) => {
   res.render("users",{users: req.data});
 });
