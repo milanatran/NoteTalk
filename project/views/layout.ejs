@@ -1,13 +1,24 @@
-<%- include ('partials/navigation.ejs') %>
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>NoteTalk App</title>
+    <script type="text/javascript" src="/js/recipeApp.js"></script>.
+    <script src="/socket.io/socket.io.js"></script>
+  </head>
+  <body>
+    <%- include ('partials/navigation.ejs') %>
 
-<div class="flashes">
-  <% if (flashMessages) { %>
-    <% if (flashMessages.success) { %>
-      <div class="flash success"><%= flashMessages.success %></div>
-    <% } else if (flashMessages.error) { %>
-      <div class="flash error"><%= flashMessages.error %></div>
-    <% } %>
-  <% } %>
-</div>
-<%- body %>
-<div id="footer">FOOTER blabla </div>
+    <div class="flashes">
+      <% if (flashMessages) { %>
+        <% if (flashMessages.success) { %>
+          <div class="flash success"><%= flashMessages.success %></div>
+        <% } else if (flashMessages.error) { %>
+          <div class="flash error"><%= flashMessages.error %></div>
+        <% } %>
+      <% } %>
+    </div>
+    <%- body %>
+    <div id="footer">FOOTER blabla </div>
+  </body>
+</html>

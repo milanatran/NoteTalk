@@ -14,25 +14,26 @@ const cookieParser = require("cookie-parser");
 const connectFlash = require("connect-flash");
 const expressValidator = require("express-validator");
 const User = require("./models/user");
-
-/************************************** test creating chatrooms START*/
 const passport = require("passport");
-const io = require("socket.io")(3000); //TODO: server mit dem socket wird schon verwendet
-const users = {};
-io.on("connection", socket => {
-  socket.on("new-user", name => {
-    users[socket.id] = name;
-    socket.broadcast.emit("user-connected", name);
-  });
-  socket.on("send-chat-message", message => {
-    // Send message to everyone connected to the server except for the sender
-    socket.broadcast.emit("chat-message", {message: message, name: users[socket.id]})
-  });
-  socket.on("disconnect", () => {
-    socket.broadcast.emit("user-disconnected", users[socket.id]);
-    delete users[socket.id];
-  })
-});
+/************************************** test creating chatrooms START*/
+//https://www.youtube.com/watch?v=rxzOqP9YwmM&t=0s
+//
+// const io = require("socket.io")(3000); //TODO: server mit dem socket wird schon verwendet
+// const users = {};
+// io.on("connection", socket => {
+//   socket.on("new-user", name => {
+//     users[socket.id] = name;
+//     socket.broadcast.emit("user-connected", name);
+//   });
+//   socket.on("send-chat-message", message => {
+//     // Send message to everyone connected to the server except for the sender
+//     socket.broadcast.emit("chat-message", {message: message, name: users[socket.id]})
+//   });
+//   socket.on("disconnect", () => {
+//     socket.broadcast.emit("user-disconnected", users[socket.id]);
+//     delete users[socket.id];
+//   })
+// });
 /************************************** test creating chatrooms END */
 
 // Database
@@ -96,6 +97,7 @@ router.use((req, res, next) => {
 
 //routes
 router.get("/", homeController.showHomePage);
+router.get("/chat", homeController.chat);
 
 router.get("/confirmMail", usersController.postedSignUp);
 router.get("/chatrooms", usersController.showChatrooms);
@@ -126,8 +128,8 @@ app.use("/", router);
 app.use(errorController.respondNoResourceFound);
 app.use(errorController.respondInternalError);
 
-app.listen(app.get("port"), () => {
-  console.log(
-    `Server running at http://localhost:${app.get("port")}`
-  );
+const server = app.listen(app.get("port"), () => {
+ console.log(`Server running at http://localhost:${ app.get("port") }`);
 });
+const io = require("socket.io")(server);
+require("./controllers/chatController")(io);
