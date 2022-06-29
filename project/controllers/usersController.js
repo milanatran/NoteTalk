@@ -165,37 +165,6 @@ logout: (req, res, next) => {
 
 
 
-
-   show: (req, res, next) => {
-     let userEmail = req.body.email;
-     User.findOne({email:userEmail})
-     .populate("chatrooms")
-     .then(user => {
-        if (user) {
-        user.passwordComparison(req.body.password)
-        .then(passwordsMatch => {
-          if (passwordsMatch) {
-             res.locals.redirect = `/users/${user._id}`;
-            req.flash("success", `${user.name}'s logged in successfully!`);
-            res.locals.user = user;
-          } else {
-            req.flash("error", "Failed to log in user account: Incorrect Password.");
-            res.locals.redirect = "/signIn";
-          }
-          next();
-          });
-      } else {
-        req.flash("error", "Failed to log in user account: User account not found.");
-        res.locals.redirect = "/signIn";
-        next();
-       }
-       })
-      .catch(error => {
-         console.log(`Error logging in user: ${error.message}`);
-         next(error);
-      });
-   },
-
   showView: (req, res) => {
    res.render("users/show");
  },

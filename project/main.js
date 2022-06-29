@@ -93,11 +93,12 @@ router.get("/users", usersController.index);
 router.get("/users", usersController.getAllUsers,(req, res, next) => {
   res.render("users",{users: req.data});
 });
-//router.get("/users/new", usersController.new);
-//router.post("/users/create", usersController.create, usersController.redirectView);
+/*
+router.get("/users/new", usersController.new);/router.post("/users/create", usersController.create, usersController.redirectView);
 router.get("/users/:id/edit", usersController.loadUserById, usersController.edit);
 router.put("/users/:id/update", usersController.update,usersController.redirectView);
 router.delete("/users/:id/delete", usersController.delete, usersController.redirectView);
+*/
 
 // error handling
 router.use(errorController.respondNoResourceFound);
