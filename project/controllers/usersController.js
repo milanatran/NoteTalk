@@ -42,7 +42,21 @@ module.exports =  {
      },
 
     indexView: (req, res) => {
-     res.render("users/index");
+     if (req.query.format === "json") {
+       console.log("hi");
+      res.json(res.locals.users);
+      } else {
+        res.render("users");
+      }
+    },
+    chatroomsView: (req, res) => {
+     if (req.query.format === "json") {
+      res.json(res.locals.user.chatrooms);
+      console.log(res.locals.user);
+      console.log(res.locals.user.chatrooms);
+      } else {
+        res.render("/users/chatrooms");
+      }
     },
 
     getAllUsers:  (req, res, next) => {
@@ -77,22 +91,6 @@ module.exports =  {
          next();
        }
      });
-    // User.create(getUserParams(req.body))
-    // .then(result => {
-    //   req.flash("success", `${result.name}'s account created successfully!`);
-    //   res.locals.redirect = `/confirmMail`;
-    //   res.locals.user = result;
-    //   next();
-    // })
-    // .catch(error => {
-    //   console.log(`Error saving user: ${error.message}`);
-    //   res.locals.redirect = "/";
-    //   req.flash(
-    //     "error",
-    //     `Failed to create user account because: ${error.message}.`
-    //   );
-    //   next(error);
-    //   });
   },
 
   showChatrooms: (req, res) => {
@@ -114,7 +112,7 @@ module.exports =  {
   postedSignUp: (req, res) => {
     res.render("confirmMail");
   },
-
+/*
   new: (req, res) => {
     res.render("users/new");
   },
@@ -138,7 +136,7 @@ module.exports =  {
       next();
    });
   },
-
+*/
   redirectView: (req, res, next) => {
    let redirectPath = res.locals.redirect;
    console.log(redirectPath);
@@ -164,37 +162,6 @@ logout: (req, res, next) => {
 },
 
 
-
-
-   show: (req, res, next) => {
-     let userEmail = req.body.email;
-     User.findOne({email:userEmail})
-     .populate("chatrooms")
-     .then(user => {
-        if (user) {
-        user.passwordComparison(req.body.password)
-        .then(passwordsMatch => {
-          if (passwordsMatch) {
-             res.locals.redirect = `/users/${user._id}`;
-            req.flash("success", `${user.name}'s logged in successfully!`);
-            res.locals.user = user;
-          } else {
-            req.flash("error", "Failed to log in user account: Incorrect Password.");
-            res.locals.redirect = "/signIn";
-          }
-          next();
-          });
-      } else {
-        req.flash("error", "Failed to log in user account: User account not found.");
-        res.locals.redirect = "/signIn";
-        next();
-       }
-       })
-      .catch(error => {
-         console.log(`Error logging in user: ${error.message}`);
-         next(error);
-      });
-   },
 
   showView: (req, res) => {
    res.render("users/show");
@@ -252,6 +219,7 @@ delete: (req, res, next) => {
 },
 
 validate: (req, res, next) => {
+  console.log(req.body);
  req.sanitizeBody("email").normalizeEmail({
    all_lowercase: true
  }).trim();
