@@ -42,7 +42,21 @@ module.exports =  {
      },
 
     indexView: (req, res) => {
-     res.render("users/index");
+     if (req.query.format === "json") {
+       console.log("hi");
+      res.json(res.locals.users);
+      } else {
+        res.render("users");
+      }
+    },
+    chatroomInviationsView: (req, res) => {
+     if (req.query.format === "json") {
+      res.json(res.locals.user.chatroomInvitations);
+      console.log(res.locals.user);
+      console.log(res.locals.user.chatroomInvitations);
+      } else {
+        res.render("/users/chatroomInviations");
+      }
     },
 
     getAllUsers:  (req, res, next) => {
@@ -77,22 +91,6 @@ module.exports =  {
          next();
        }
      });
-    // User.create(getUserParams(req.body))
-    // .then(result => {
-    //   req.flash("success", `${result.name}'s account created successfully!`);
-    //   res.locals.redirect = `/confirmMail`;
-    //   res.locals.user = result;
-    //   next();
-    // })
-    // .catch(error => {
-    //   console.log(`Error saving user: ${error.message}`);
-    //   res.locals.redirect = "/";
-    //   req.flash(
-    //     "error",
-    //     `Failed to create user account because: ${error.message}.`
-    //   );
-    //   next(error);
-    //   });
   },
 
   showChatrooms: (req, res) => {
@@ -114,7 +112,7 @@ module.exports =  {
   postedSignUp: (req, res) => {
     res.render("confirmMail");
   },
-
+/*
   new: (req, res) => {
     res.render("users/new");
   },
@@ -138,7 +136,7 @@ module.exports =  {
       next();
    });
   },
-
+*/
   redirectView: (req, res, next) => {
    let redirectPath = res.locals.redirect;
    console.log(redirectPath);
@@ -221,6 +219,7 @@ delete: (req, res, next) => {
 },
 
 validate: (req, res, next) => {
+  console.log(req.body);
  req.sanitizeBody("email").normalizeEmail({
    all_lowercase: true
  }).trim();

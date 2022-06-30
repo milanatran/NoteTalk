@@ -5,6 +5,7 @@
     <% if (loggedIn) { %>
      Logged in as <a href="<%=`/users/${currentUser._id}`%>"> <%= currentUser.name  %></a>
      <a href="/users/logout">Log out</a>
+     
     <%} else {%>
      <a href="/signIn">Log In</a>
     <% } %>

@@ -1,5 +1,8 @@
 <%- include ('partials/navigation.ejs') %>
 
+<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+
 <div class="flashes">
   <% if (flashMessages) { %>
     <% if (flashMessages.success) { %>
@@ -9,5 +12,11 @@
     <% } %>
   <% } %>
 </div>
+
+  </<div class="login">
+    <% if(loggedIn) {%>
+      <li><%- include chatrooms/_chatroomsModal %></li>
+    <% } %>
+  </div>
 <%- body %>
 <div id="footer">FOOTER blabla </div>
