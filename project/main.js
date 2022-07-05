@@ -14,9 +14,26 @@ const cookieParser = require("cookie-parser");
 const connectFlash = require("connect-flash");
 const expressValidator = require("express-validator");
 const User = require("./models/user");
+
+/************************************** test creating chatrooms START*/
 const passport = require("passport");
-
-
+const io = require("socket.io")(3000); //TODO: server mit dem socket wird schon verwendet
+const users = {};
+io.on("connection", socket => {
+  socket.on("new-user", name => {
+    users[socket.id] = name;
+    socket.broadcast.emit("user-connected", name);
+  });
+  socket.on("send-chat-message", message => {
+    // Send message to everyone connected to the server except for the sender
+    socket.broadcast.emit("chat-message", {message: message, name: users[socket.id]})
+  });
+  socket.on("disconnect", () => {
+    socket.broadcast.emit("user-disconnected", users[socket.id]);
+    delete users[socket.id];
+  })
+});
+/************************************** test creating chatrooms END */
 
 // Database
 mongoose.Promise = global.Promise;
@@ -48,7 +65,7 @@ router.use(methodOverride("_method", {
  methods: ["POST", "GET"]
 }));
 
-//sessions for not having to logain al the time
+//sessions for not having to login al the time
 router.use(cookieParser("secret_passcode"));
 router.use(expressSession({
  secret: "secret_passcode",
