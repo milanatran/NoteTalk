@@ -1,7 +1,9 @@
 <%- include ('partials/navigation.ejs') %>
+<li><%- include ("chatrooms/_chatroomsModal") %></li>
 
 <script type="text/javascript" src="/js/jquery.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/notetalkApp.js"></script>
 
 <div class="flashes">
   <% if (flashMessages) { %>
@@ -13,9 +15,9 @@
   <% } %>
 </div>
 
-  </<div class="login">
+  <div class="login">
     <% if(loggedIn) {%>
-      <li><%- include chatrooms/_chatroomsModal %></li>
+
     <% } %>
   </div>
 <%- body %>

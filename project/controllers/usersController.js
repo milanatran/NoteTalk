@@ -6,6 +6,7 @@ mongoose.connect(
 const User = require("../models/user");
 const Chatroom = require("../models/chatroom");
  const passport = require("passport") ;
+ const httpStatus = require("http-status-codes");
 
 var room = [
  {
@@ -49,15 +50,74 @@ module.exports =  {
         res.render("users");
       }
     },
-    chatroomInviationsView: (req, res) => {
+    chatroomInvitations: (req, res) => {
      if (req.query.format === "json") {
       res.json(res.locals.user.chatroomInvitations);
       console.log(res.locals.user);
       console.log(res.locals.user.chatroomInvitations);
       } else {
-        res.render("/users/chatroomInviations");
+        res.render(`/users/${user._id}/chatroomInviations`);
       }
     },
+    respondJSON: (req, res) => {
+ res.json({
+ status: httpStatus.OK,
+ data: res.locals
+ });
+},
+
+chatroomsView: (req, res) => {
+ if (req.query.format === "json") {
+  res.json(res.locals.user.chatrooms);
+  console.log(res.locals.user);
+  console.log(res.locals.user.chatrooms);
+  } else {
+    res.render(`/users/${user._id}/chatrooms`);
+  }
+},
+respondJSON: (req, res) => {
+res.json({
+status: httpStatus.OK,
+data: res.locals
+});
+},
+
+join: (req, res, next) => {
+ let courseId = req.params.id,
+ currentUser = req.user;
+ if (currentUser) {
+ User.findByIdAndUpdate(currentUser, {
+$addToSet: {courses: courseId
+}
+ })
+.then(() => {
+res.locals.success = true;
+next();
+})
+.catch(error => {
+next(error);
+});
+ } else {
+ next(new Error("User must log in."));
+ }
+},
+
+errorJSON: (error, req, res, next) => {
+ let errorObject;
+ if (error) {
+ errorObject = {
+status: httpStatus.INTERNAL_SERVER_ERROR,
+message: error.message
+ };
+ } else {
+ errorObject = {
+status: httpStatus.OK,
+message: "Unknown Error."
+ };
+ }
+ res.json(errorObject);
+},
+
 
     getAllUsers:  (req, res, next) => {
       User.find( {})
@@ -241,5 +301,4 @@ validate: (req, res, next) => {
   }
  });
 }
-
 };

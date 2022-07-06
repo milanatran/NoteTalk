@@ -56,25 +56,25 @@ db.once("open", () => {
 app.set("view engine", "ejs");
 app.set("port", process.env.PORT || 3000);
 
-router.use(express.static("public"));
-const layoutTest = router.use(layouts);
-console.log(layoutTest);
-router.use(
+app.use(express.static("public"));
+app.use(layouts);
+
+app.use(
   express.urlencoded({
     extended: false
   })
 );
-router.use(express.json());
+app.use(express.json());
 express.urlencoded();
-router.use(expressValidator());
+app.use(expressValidator());
 
-router.use(methodOverride("_method", {
+app.use(methodOverride("_method", {
  methods: ["POST", "GET"]
 }));
 
 //sessions for not having to login al the time
-router.use(cookieParser("secret_passcode"));
-router.use(expressSession({
+app.use(cookieParser("secret_passcode"));
+app.use(expressSession({
  secret: "secret_passcode",
  cookie: {
  maxAge: 4000000
@@ -82,11 +82,11 @@ router.use(expressSession({
  resave: false,
  saveUninitialized: false
 }));
-router.use(connectFlash());
+app.use(connectFlash());
 
 
-router.use(passport.initialize());
-router.use(passport.session());
+app.use(passport.initialize());
+app.use(passport.session());
 
 //data security
 passport.use(User.createStrategy());
@@ -94,7 +94,7 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 //every request   uses that
-router.use((req, res, next) => {
+app.use((req, res, next) => {
  res.locals.flashMessages = req.flash();
  res.locals.loggedIn = req.isAuthenticated();
  res.locals.currentUser = req.user;
