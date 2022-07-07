@@ -15,13 +15,23 @@ const userSchema = new Schema(
        unique:true,
      },
 
-
-
      chatrooms: [{type: mongoose.Schema.Types.ObjectId, ref: "Chatroom"}],
+
+     chatroomInvitations: [{type: mongoose.Schema.Types.ObjectId, ref: "Chatroom"}],
+
     },{
      timestamps: true
     }
 );
+
+userSchema.post("save", function(next){
+  if( !this.chatrooms || this.chatrooms.length == 0 ){
+    this.chatrooms=[];
+  }
+  if(!this.chatroomInvitations || this.chatroomInvitations.length == 0){
+    this.chatroomInvitations=[];
+  }
+})
 
 
 userSchema.plugin(passportLocalMongoose, {

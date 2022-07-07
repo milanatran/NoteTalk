@@ -55,9 +55,10 @@ module.exports =  {
       res.json(res.locals.user.chatroomInvitations);
       console.log(res.locals.user);
       console.log(res.locals.user.chatroomInvitations);
+      console.log("got until chatroomInvitations");
       } else {
         res.render(`/users/${user._id}/chatroomInviations`);
-        console.log("nooo");
+        console.log("got until chatroomInvitations")
       }
     },
     respondJSON: (req, res) => {

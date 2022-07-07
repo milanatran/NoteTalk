@@ -25,19 +25,36 @@ $(document).ready(() => {
 });
 */
 
+//TODO:
+/*
+eine möglichkeit invitations an andere zu geben:
+- ein ejs erstellen um das zu machen
+      - email feld
+- get,post in userRoutes-> users/:id/invite
+
+- js code
+      - get -> gerade erstelltes ejs rendern
+      - post -> user mit emaili bekommt invitations -> bei dem user wird unter chatroom inviations der charoom hinzugefügt
+
+
+ein möglichkeit einladungen anzunehmen:
+- wenn man auf jion gruckt wird aus chatroomInivations eins gelöscht und in chatrooms hinzugefügt      
+*/
+
+
+
 $(document).ready(() => {
    $("#modal-button").click(() => {
      $(".modal-body").html("");
      console.log("modelTry");
 
-    let link = $('#footer').attr('href');
-       console.log(link);
+    let link = document.baseURI;//$('#footer');//.attr('baseURI');
     var linkSplitted=link.split("/users/");
     var id = linkSplitted[1];
-
-       $.get(`/users/${user._id}/chatroomInvitations?format=json`, (results = {}) => {
+console.log(id);
+       $.get(`/users/${id}/chatroomInvitations?format=json`, (results = {}) => {
       let data = results.data;
-      if (!data || !data.chatroomInvitations) return;
+      if (!data || !data.chatroomInvitations) {console.log("no data");return;}
       data.chatroomInvitations.forEach((chatroomInvitation) => {
         $(".modal-body").append(`<div>
         <span class="chatroomInvitation-title">
@@ -63,7 +80,11 @@ let addJoinButtonListener = () => {
  $(".join-button").click((event) => {
  let $button = $(event.target),
 chatroomInvitationId = $button.data("id");
- $.get(`/users/${user._id}/chatroomInvitations/${chatroomInvitationId}/join`, (results = {}) => {
+let link = document.baseURI;//$('#footer');//.attr('baseURI');
+   console.log(link);
+var linkSplitted=link.split("/users/");
+var id = linkSplitted[1];
+ $.get(`/users/${id}/chatroomInvitations/${chatroomInvitationId}/join`, (results = {}) => {
 let data = results.data;
 if (data && data.success) {
 $button

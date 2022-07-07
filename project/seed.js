@@ -9,6 +9,7 @@ const Chatroom = require("./models/chatroom");
 
 
 
+
 var contacts = [
  {
  name: "Jon Wexler",
@@ -71,26 +72,33 @@ console.log("chatroom created");
 
 async function createUsers(){
   await contacts.forEach(async c => {
-  await  createUser(c);
+  await createUser(c);
+  await console.log(" 1 user created");
+
 });
-await console.log("user created");
+await console.log("users created");
+
 }
 //einzeln    node hat debug modus, den vielleicht nutzen
 async function createUser(user){
-  User.create({
+ console.log("users in process of beeing created");
+  await User.create({
  name: user.name,
  email: user.email,
  password: user.password,
  chatrooms:user.chatrooms
-  })
+});
 }
 
 async function addChatroomToUser(){
+  await console.log("chatrooms in process ob being connected")
+  var users = await User.find({});
+  await console.log(users);
   await User.findOne({name: "Chef Eggplant"}).then(
-   user => {
-     testUser = user;
+    user => {
+    testUser = user;
      console.log(user);
-     testUser.chatrooms.push(testRoom);
+      testUser.chatrooms.push(testRoom);
      testUser.save().then(()=>{console.log("chatrooms connected");console.log(testUser);})
      .catch(error => {console.log(error)});
 
