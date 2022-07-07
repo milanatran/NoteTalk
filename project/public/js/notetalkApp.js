@@ -32,9 +32,9 @@ eine möglichkeit invitations an andere zu geben:
       - email feld
 - get,post in userRoutes-> users/:id/invite
 
-- js code in usersController
-      - get -> gerade erstelltes ejs rendern
-      - post -> user mit email bekommt invitations -> bei dem user wird unter chatroom inviations der charoom hinzugefügt
+DONE: - js code in usersController
+DONE:      - get -> gerade erstelltes ejs rendern
+DONE:      - post -> user mit email bekommt invitations -> bei dem user wird unter chatroom inviations der charoom hinzugefügt
 
 DONE:ein möglichkeit einladungen anzunehmen:
 DONE:- wenn man auf jion gruckt wird aus chatroomInivations eins gelöscht und in chatrooms hinzugefügt
@@ -49,10 +49,13 @@ $(document).ready(() => {
 
     let link = document.baseURI;//$('#footer');//.attr('baseURI');
     var linkSplitted=link.split("/users/");
-    var id = linkSplitted[1];
+    var idWithSlash =linkSplitted[1];
+    var id =idWithSlash.split("/")[0];
+
 console.log(id);
        $.get(`/users/${id}/chatroomInvitations?format=json`, (results = {}) => {
       let data = results.data;
+      console.log(results);
       if (!data || !data.chatroomInvitations) {console.log("no data");return;}
       data.chatroomInvitations.forEach((chatroomInvitation) => {
         $(".modal-body").append(`<div>

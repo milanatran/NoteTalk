@@ -17,7 +17,7 @@ const userSchema = new Schema(
 
      chatrooms: [{type: mongoose.Schema.Types.ObjectId, ref: "Chatroom"}],
 
-     chatroomInvitations: [{type: mongoose.Schema.Types.ObjectId, ref: "Chatroom"}],
+     chatroomInvitations: [{type:String}],//{type: mongoose.Schema.Types.ObjectId, ref: "Chatroom"}
 
     },{
      timestamps: true

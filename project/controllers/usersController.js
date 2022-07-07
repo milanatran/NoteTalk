@@ -105,29 +105,50 @@ next(error);
 },
 
 invitaionView:(req, res, next)=>{
-
+res.render("users/invite");
 },
 
 
-sendInvitation:(req, res, next)=>{
-  let email = req.body.email;
+sendInvitation:async (req, res, next)=>{
+  let userEmail = req.body.email;
   let user;
+  let invitationPath = req.body.chatroomPath;
+  console.log("email: "+userEmail);
 
   //find User
-  User.findUserByEmail(userId)
-	 .then(result=>{user = result})
+  await User.find({email:userEmail})
+	 .then(result=>{user = result;console.log(user); console.log("fund user to invite")})
    .catch(error => {
+     console.log(error);
      next(error);
       });
+
+//findChatroom
+let chatroom;
+console.log(invitationPath);
+console.log('hqe373');
+  await Chatroom.findOne({chatroomPath:[invitationPath]})
+  .then(result=>{chatroom = result;console.log(chatroom); console.log("fund chatroom")})
+  .catch(error => {
+    console.log(error);
+    next(error);
+     });
+  console.log(chatroom._id);
+let chatroomId =chatroom._id;
+
 //add Invitation to the Array of Invitaions
-  User.findByIdAndUpdate(user, {
-   $addToSet: {chatroomInvitations: invitationId},
-    })
-   .then(() => {
+  await User.findByIdAndUpdate(user, {
+   $addToSet: {chatroomInvitations: [chatroomId]},
+ }).exec()
+   .then(updatedUser => {
+     console.log(updatedUser);
+     console.log("invited user");
      res.locals.success = true;
+     res.locals.redirect = "./";
      next();
    })
    .catch(error => {
+     console.log(error);
    next(error);
    });
 },
