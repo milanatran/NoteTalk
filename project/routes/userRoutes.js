@@ -28,7 +28,7 @@ router.post("/users/new",usersController.validate, usersController.saveUser,user
 router.post("/users/create", usersController.create, usersController.redirectView);
 */
 router.get("/users/:id/chatroomInvitations",usersController.loadUserById, usersController.chatroomInvitations, usersController.respondJSON);
-router.get("/users/:id/chatroomInvitations/:id/join", usersController.join, usersController.respondJSON)
+router.get("/users/:id/chatroomInvitations/:invitationId/join", usersController.join, usersController.respondJSON)
 
 router.use(usersController.errorJSON);
 

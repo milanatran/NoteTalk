@@ -32,13 +32,12 @@ eine möglichkeit invitations an andere zu geben:
       - email feld
 - get,post in userRoutes-> users/:id/invite
 
-- js code
+- js code in usersController
       - get -> gerade erstelltes ejs rendern
-      - post -> user mit emaili bekommt invitations -> bei dem user wird unter chatroom inviations der charoom hinzugefügt
+      - post -> user mit email bekommt invitations -> bei dem user wird unter chatroom inviations der charoom hinzugefügt
 
-
-ein möglichkeit einladungen anzunehmen:
-- wenn man auf jion gruckt wird aus chatroomInivations eins gelöscht und in chatrooms hinzugefügt      
+DONE:ein möglichkeit einladungen anzunehmen:
+DONE:- wenn man auf jion gruckt wird aus chatroomInivations eins gelöscht und in chatrooms hinzugefügt
 */
 
 

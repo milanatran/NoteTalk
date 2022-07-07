@@ -85,12 +85,12 @@ data: res.locals
 },
 
 join: (req, res, next) => {
- let courseId = req.params.id,
+ let invitationId = req.params.invitationId,
  currentUser = req.user;
  if (currentUser) {
  User.findByIdAndUpdate(currentUser, {
-$addToSet: {courses: courseId
-}
+      $addToSet: {chatrooms: invitationId},
+      $pull:{chatroomInvitaions: invitationId}
  })
 .then(() => {
 res.locals.success = true;
@@ -102,6 +102,34 @@ next(error);
  } else {
  next(new Error("User must log in."));
  }
+},
+
+invitaionView:(req, res, next)=>{
+
+},
+
+
+sendInvitation:(req, res, next)=>{
+  let email = req.body.email;
+  let user;
+
+  //find User
+  User.findUserByEmail(userId)
+	 .then(result=>{user = result})
+   .catch(error => {
+     next(error);
+      });
+//add Invitation to the Array of Invitaions
+  User.findByIdAndUpdate(user, {
+   $addToSet: {chatroomInvitations: invitationId},
+    })
+   .then(() => {
+     res.locals.success = true;
+     next();
+   })
+   .catch(error => {
+   next(error);
+   });
 },
 
 errorJSON: (error, req, res, next) => {

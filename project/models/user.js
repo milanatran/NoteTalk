@@ -31,7 +31,7 @@ userSchema.post("save", function(next){
   if(!this.chatroomInvitations || this.chatroomInvitations.length == 0){
     this.chatroomInvitations=[];
   }
-})
+});
 
 
 userSchema.plugin(passportLocalMongoose, {
