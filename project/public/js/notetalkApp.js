@@ -25,12 +25,16 @@ $(document).ready(() => {
 });
 */
 
-
-
 $(document).ready(() => {
    $("#modal-button").click(() => {
      $(".modal-body").html("");
-     console.log("modelTry")
+     console.log("modelTry");
+
+    let link = $('#footer').attr('href');
+       console.log(link);
+    var linkSplitted=link.split("/users/");
+    var id = linkSplitted[1];
+
        $.get(`/users/${user._id}/chatroomInvitations?format=json`, (results = {}) => {
       let data = results.data;
       if (!data || !data.chatroomInvitations) return;

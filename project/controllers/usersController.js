@@ -57,6 +57,7 @@ module.exports =  {
       console.log(res.locals.user.chatroomInvitations);
       } else {
         res.render(`/users/${user._id}/chatroomInviations`);
+        console.log("nooo");
       }
     },
     respondJSON: (req, res) => {
