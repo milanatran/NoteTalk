@@ -1,8 +1,6 @@
 const router = require("express").Router();
 const usersController = require("../controllers/usersController");
 
-//Last status: Listing 26.1
-
 router.get("/confirmMail", usersController.postedSignUp);
 router.get("/chatrooms", usersController.showChatrooms);
 router.get("/signIn", usersController.showSignIn);

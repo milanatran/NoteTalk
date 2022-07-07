@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const passportLocalMongoose = require("passport-local-mongoose");
+const randToken = require("rand-token");
 const {Schema} = mongoose;
 const userSchema = new Schema(
    {
@@ -14,6 +15,10 @@ const userSchema = new Schema(
        lowercase: true,
        unique:true,
      },
+
+     // apiToken: {
+     //   type: String;
+     // },
 
      chatrooms: [{type: mongoose.Schema.Types.ObjectId, ref: "Chatroom"}],
 
@@ -58,5 +63,10 @@ userSchema.methods.findById = function() {
  .findOne({_id: this.id})
  .exec();
 };
+userSchema.pre("save", function(next) {
+ let user = this;
+ if (!user.apiToken) user.apiToken = randToken.generate(16);
+ next();
+});
 
 module.exports = mongoose.model("User", userSchema);
