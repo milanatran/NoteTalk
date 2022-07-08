@@ -57,7 +57,7 @@ module.exports =  {
       console.log(res.locals.user.chatroomInvitations);
       console.log("got until chatroomInvitations");
       } else {
-        res.render(`/users/${user._id}/chatroomInviations`);
+        res.render(`/users/${user._id}/chatroomInvitations`);
         console.log("got until chatroomInvitations")
       }
     },
@@ -71,8 +71,6 @@ module.exports =  {
 chatroomsView: (req, res) => {
  if (req.query.format === "json") {
   res.json(res.locals.user.chatrooms);
-  console.log(res.locals.user);
-  console.log(res.locals.user.chatrooms);
   } else {
     res.render(`/users/${user._id}/chatrooms`);
   }
@@ -84,21 +82,40 @@ data: res.locals
 });
 },
 
-join: (req, res, next) => {
+ join:async (req, res, next) => {
  let invitationId = req.params.invitationId,
  currentUser = req.user;
+ console.log("invitation: " + invitationId);
  if (currentUser) {
- User.findByIdAndUpdate(currentUser, {
-      $addToSet: {chatrooms: invitationId},
-      $pull:{chatroomInvitaions: invitationId}
- })
-.then(() => {
+
+   let userId = currentUser._id
+let chatroom;
+
+
+await Chatroom.findOne({_id: new ObjectId(invitationId)})
+.then(result=>{chatroom = result})
+.catch(error => {
+  console.log(error);
+next(error);
+});
+console.log(chatroom);
+//db.users.findOneAndUpdate({_id:ObjectId("62c82f1f46e79b71a2b075e3")}, {$pull:{chatroomInvitations:ObjectId("62c82f1370026d5b6f5e36cb")}})
+ await User.findOneAndUpdate({_id: new ObjectId(userId)}, {$pull:{chatroomInvitations: new ObjectId(invitationId)}
+      //$addToSet: {chatrooms: invitationId},
+})
+.then(result => {
+  console.log("found user to update:")
+  console.log(result)
 res.locals.success = true;
+console.log(currentUser);
 next();
 })
 .catch(error => {
+  console.log(error);
 next(error);
 });
+
+
  } else {
  next(new Error("User must log in."));
  }
@@ -125,8 +142,6 @@ sendInvitation:async (req, res, next)=>{
 
 //findChatroom
 let chatroom;
-console.log(invitationPath);
-console.log('hqe373');
   await Chatroom.findOne({chatroomPath:[invitationPath]})
   .then(result=>{chatroom = result;console.log(chatroom); console.log("fund chatroom")})
   .catch(error => {
@@ -282,7 +297,8 @@ logout: (req, res, next) => {
    let userId = req.params.id;
   User.findById(userId)
    .populate("chatrooms")
-   .then(result=> {res.locals.user = result;next();})
+   .populate("chatroomInvitations")
+   .then(result=> {res.locals.user = result;console.log(result);next();})
    .catch(error => {
     console.log(`Error fetching user by ID: ${error.message}`);
     next(error);

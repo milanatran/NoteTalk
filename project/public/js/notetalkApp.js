@@ -54,10 +54,11 @@ $(document).ready(() => {
 
 console.log(id);
        $.get(`/users/${id}/chatroomInvitations?format=json`, (results = {}) => {
-      let data = results.data;
-      console.log(results);
-      if (!data || !data.chatroomInvitations) {console.log("no data");return;}
-      data.chatroomInvitations.forEach((chatroomInvitation) => {
+      let data = results;
+      console.log(data);
+      console
+      if (!data || data.length<1) {console.log("no data");return;}
+      data.forEach((chatroomInvitation) => {
         $(".modal-body").append(`<div>
         <span class="chatroomInvitation-title">
         ${chatroomInvitation.title}
@@ -82,10 +83,11 @@ let addJoinButtonListener = () => {
  $(".join-button").click((event) => {
  let $button = $(event.target),
 chatroomInvitationId = $button.data("id");
+
 let link = document.baseURI;//$('#footer');//.attr('baseURI');
-   console.log(link);
 var linkSplitted=link.split("/users/");
-var id = linkSplitted[1];
+var idWithSlash =linkSplitted[1];
+var id =idWithSlash.split("/")[0];
  $.get(`/users/${id}/chatroomInvitations/${chatroomInvitationId}/join`, (results = {}) => {
 let data = results.data;
 if (data && data.success) {
