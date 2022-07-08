@@ -1,9 +1,4 @@
 <%- include ('partials/navigation.ejs') %>
-
-
-
-
-
 <div class="flashes">
   <% if (flashMessages) { %>
     <% if (flashMessages.success) { %>
@@ -13,10 +8,8 @@
     <% } %>
   <% } %>
 </div>
-
   <div class="login">
     <% if(loggedIn) {%>
-
     <% } %>
   </div>
 <%- body %>
