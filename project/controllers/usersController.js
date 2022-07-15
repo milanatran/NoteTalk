@@ -28,7 +28,11 @@ password: body.password
  };
 
 module.exports =  {
+  chat: (req, res) => {
+    console.log("Trying to render chat.ejs...");
+    res.render("chat");
 
+  },
     index: (req, res, next) => {
       User.find()
       .then(users => {
@@ -146,7 +150,7 @@ module.exports =  {
    else next();
  },
 
-//flash messages do not work
+
  authenticate: passport.authenticate("local", {
  failureRedirect: "/signIn",
  failureFlash: "Failed to login.",

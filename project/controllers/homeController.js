@@ -7,6 +7,8 @@ module.exports = {
   },
 
   chat: (req, res) => {
+    console.log("Trying to render chat.ejs...");
     res.render("chat");
+
   }
 };

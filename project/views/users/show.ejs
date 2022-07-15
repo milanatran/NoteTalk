@@ -12,6 +12,15 @@
    <th>Password</th>
    <td><%= user.password %></td>
  </tr>
+
+ <tr>
+   <td>
+     <a href="<%=`/users/${user._id}/chat` %>">
+     Chat
+    </a>
+    </td>
+  </tr>
+
  <tr>
    <td>
      <a href="<%=`/users/${user._id}/edit` %>">

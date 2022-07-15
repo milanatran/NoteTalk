@@ -25,16 +25,19 @@ router.get("/users/new", usersController.showSignUp);
 router.post("/users/new",usersController.validate, usersController.saveUser,usersController.redirectView);
 router.post("/users/create", usersController.create, usersController.redirectView);
 */
+
 router.get("/users/:id/chatroomInvitations",usersController.loadUserById, usersController.chatroomInvitations, usersController.respondJSON);
 router.get("/users/:id/chatroomInvitations/:invitationId/join", usersController.join, usersController.respondJSON)
 
 router.use(usersController.errorJSON);
+router.get("/users/:id/chat", usersController.chat);
 
 router.get("/users/:id/chatrooms", usersController.loadUserById, usersController.chatroomsView);
 router.get("/users/:id/edit", usersController.loadUserById, usersController.edit);
 router.put("/users/:id/update", usersController.update,usersController.redirectView);
 router.delete("/users/:id/delete", usersController.delete, usersController.redirectView);
 router.get("/users/:id",usersController.loadUserById,usersController.showView);
+
 
 
 

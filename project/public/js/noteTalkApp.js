@@ -3,7 +3,8 @@ const socket = io('http://localhost:3000');
 const messageContainer = document.getElementById('message-container');
 const messageForm = document.getElementById('send-container');
 const messageInput = document.getElementById('message-input');
-
+const userId = document.getElementById('chat-user-id');
+const userName = document.getElementById('chat-user-name');
 socket.on('chat-message', data => {
   appendMessage(data);
 });
@@ -12,6 +13,8 @@ messageForm.addEventListener('submit', e => {
   //Stop site from refreshing so the chat does not disappear
   e.preventDefault();
   const message = messageInput.value;
+
+  appendMessage(`${userName}: ${message}`);
   socket.emit('send-chat-message', message);
   messageInput.value = '';
 });
