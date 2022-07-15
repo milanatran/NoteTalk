@@ -33,7 +33,7 @@ router.get("/users/:id/chatroomInvitations",usersController.loadUserById, usersC
 router.get("/users/:id/chatroomInvitations/:invitationId/join", usersController.join, usersController.respondJSON)
 
 router.use(usersController.errorJSON);
-
+router.get("/users/:id/chat",usersController.chat);
 router.get("/users/:id/chatrooms", usersController.loadUserById, usersController.chatroomsView);
 router.get("/users/:id/edit", usersController.loadUserById, usersController.edit);
 router.put("/users/:id/update", usersController.update,usersController.redirectView);

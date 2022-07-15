@@ -29,7 +29,9 @@ password: body.password
  };
 
 module.exports =  {
-
+  chat: (req, res) => {
+res.render("chat");
+},
     index: (req, res, next) => {
       User.find()
       .then(users => {
@@ -151,7 +153,9 @@ let chatroom;
     console.log(error);
     next(error);
      });
+
   console.log(chatroom._id);
+
 let chatroomId =chatroom._id;
 
 //add Invitation to the Array of Invitaions
