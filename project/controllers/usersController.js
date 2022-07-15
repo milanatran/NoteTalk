@@ -83,31 +83,34 @@ data: res.locals
 },
 
  join:async (req, res, next) => {
- let invitationId = req.params.invitationId,
- currentUser = req.user;
+ let invitationId = mongoose.mongo.ObjectId(req.params.invitationId);
+ //let currentUser = req.user;
+ let userId = mongoose.mongo.ObjectId(req.params.id);
+ console.log(`user id : ${userId}`)
+ //console.log(currentUser);
  console.log("invitation: " + invitationId);
- if (currentUser) {
+ if (true) {//currentUser
 
-   let userId = currentUser._id
+  // let userId = currentUser._id
 let chatroom;
 
-
-await Chatroom.findOne({_id: new ObjectId(invitationId)})
-.then(result=>{chatroom = result})
+await console.log("before finding chatroom")
+await Chatroom.findOne({_id: invitationId })
+.then(result=>{chatroom = result;console.log("chatroom found");})
 .catch(error => {
   console.log(error);
+  console.log("error while finding chatroom");
 next(error);
 });
-console.log(chatroom);
+await console.log(chatroom);
 //db.users.findOneAndUpdate({_id:ObjectId("62c82f1f46e79b71a2b075e3")}, {$pull:{chatroomInvitations:ObjectId("62c82f1370026d5b6f5e36cb")}})
- await User.findOneAndUpdate({_id: new ObjectId(userId)}, {$pull:{chatroomInvitations: new ObjectId(invitationId)}
-      //$addToSet: {chatrooms: invitationId},
+ await User.findOneAndUpdate({_id:userId}, {  $addToSet: {chatrooms: invitationId},
+   $pull:{chatroomInvitations:invitationId},
 })
 .then(result => {
   console.log("found user to update:")
   console.log(result)
 res.locals.success = true;
-console.log(currentUser);
 next();
 })
 .catch(error => {
