@@ -29,9 +29,11 @@ password: body.password
  };
 
 module.exports =  {
+  
   chat: (req, res) => {
 res.render("chat");
 },
+
     index: (req, res, next) => {
       User.find()
       .then(users => {

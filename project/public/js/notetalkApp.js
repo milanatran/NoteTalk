@@ -1,48 +1,54 @@
-/*
+
 $(document).ready(() => {
-   $("#modal-button").click(() => {
-     $(".modal-body").html('');
-     $.get(`/users/${currentUser._id}/chatroomInvitations?format=json`, (data) => {
-    data.forEach((chatroom) => {
-    $(".modal-body").append(
-      `<div>
-        <span class="chatroom-title">
-          ${chatroom.title}
-        </span>
 
-        <button class="join-button" data-id="${chatroomInvitation._id}">
-         Join
-        </button>
+  const socket = io();
 
-        <div class="chatroom-description">
-          ${chatroom.description}
-        </div>
-      </div>`
-      );
-    });
-     });
-   });
+  $("#chatForm").submit(() => {
+ let text = $("#chat-input").val(),
+ userName = $("#chat-user-name").val(),
+ userId = $("#chat-user-id").val();
+ socket.emit("message", {
+ content: text,
+ userName: userName,
+ userId: userId
+ });
+ $("#chat_input").val("");
+ return false;
 });
-*/
 
-//TODO:
-/*
-eine möglichkeit invitations an andere zu geben:
-- ein ejs erstellen um das zu machen
-      - email feld
-- get,post in userRoutes-> users/:id/invite
+socket.on("message", (message) => {
+  displayMessage(message);
+  for (let i = 0; i < 2; i++) {
+    $(".chat-icon").fadeOut(200).fadeIn(200);
+  }
+});
 
-DONE: - js code in usersController
-DONE:      - get -> gerade erstelltes ejs rendern
-DONE:      - post -> user mit email bekommt invitations -> bei dem user wird unter chatroom inviations der charoom hinzugefügt
+  socket.on("load all messages", (data) => {
+   data.forEach(message => {
+     displayMessage(message);
+   });
+  });
 
-DONE:ein möglichkeit einladungen anzunehmen:
-DONE:- wenn man auf jion gruckt wird aus chatroomInivations eins gelöscht und in chatrooms hinzugefügt
-*/
+  socket.on("user disconnected", () => {
+   displayMessage({
+   userName: "Notice",
+   content: "User left the chat"
+   });
+  });
 
+  let displayMessage = (message) => {
+    $("#chat").prepend($("<li>").html(`
+   <strong class="message ${getCurrentUserClass(message.user)}">
+   ${message.userName}
+   </strong>: ${message.content}
+   `));
+  };
 
+let getCurrentUserClass = (id) => {
+ let userId = $("#chat-user-id").val();
+ return userId === id ? "current-user": "";
+};
 
-$(document).ready(() => {
    $("#modal-button").click(() => {
      $(".modal-body").html("");
      console.log("modelTry");
