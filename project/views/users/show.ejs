@@ -1,4 +1,12 @@
 <h1>User Data for <%= user.name %></h1>
+
+<!-- <script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/notetalkApp.js"></script> -->
+
+
+<%- include ("../chatrooms/_chatroomsModal.ejs") %>
+
 <table class="table">
  <tr>
    <th>Name</th>
@@ -7,10 +15,6 @@
  <tr>
    <th>Email</th>
    <td><%= user.email %></td>
- </tr>
- <tr>
-   <th>Password</th>
-   <td><%= user.password %></td>
  </tr>
  <tr>
    <td>
@@ -24,6 +28,9 @@
   <a href="<%= `/users/${user._id}/delete?_method=DELETE` %>"onclick="return confirm('Are you sure you want to delete this record?')">
     Delete</a>
  </td>
+ <td>
+     <a href="<%= `/users/${user._id}/invite` %>" target="_blank">Profile</a>
+   </td>
  </tr>
 </table>
 

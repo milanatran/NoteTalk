@@ -6,6 +6,7 @@ mongoose.connect(
 const User = require("../models/user");
 const Chatroom = require("../models/chatroom");
  const passport = require("passport") ;
+ const httpStatus = require("http-status-codes");
 
 var room = [
  {
@@ -29,6 +30,10 @@ password: body.password
 
 module.exports =  {
 
+  chat: (req, res) => {
+res.render("chat");
+},
+
     index: (req, res, next) => {
       User.find()
       .then(users => {
@@ -42,8 +47,152 @@ module.exports =  {
      },
 
     indexView: (req, res) => {
-     res.render("users/index");
+     if (req.query.format === "json") {
+       console.log("hi");
+      res.json(res.locals.users);
+      } else {
+        res.render("users");
+      }
     },
+    chatroomInvitations: (req, res) => {
+     if (req.query.format === "json") {
+      res.json(res.locals.user.chatroomInvitations);
+      console.log(res.locals.user);
+      console.log(res.locals.user.chatroomInvitations);
+      console.log("got until chatroomInvitations");
+      } else {
+        res.render(`/users/${user._id}/chatroomInvitations`);
+        console.log("got until chatroomInvitations")
+      }
+    },
+    respondJSON: (req, res) => {
+ res.json({
+ status: httpStatus.OK,
+ data: res.locals
+ });
+},
+
+chatroomsView: (req, res) => {
+ if (req.query.format === "json") {
+  res.json(res.locals.user.chatrooms);
+  } else {
+    res.render(`/users/${user._id}/chatrooms`);
+  }
+},
+respondJSON: (req, res) => {
+res.json({
+status: httpStatus.OK,
+data: res.locals
+});
+},
+
+ join:async (req, res, next) => {
+ let invitationId = mongoose.mongo.ObjectId(req.params.invitationId);
+ //let currentUser = req.user;
+ let userId = mongoose.mongo.ObjectId(req.params.id);
+ console.log(`user id : ${userId}`)
+ //console.log(currentUser);
+ console.log("invitation: " + invitationId);
+ if (true) {//currentUser
+
+  // let userId = currentUser._id
+let chatroom;
+
+await console.log("before finding chatroom")
+await Chatroom.findOne({_id: invitationId })
+.then(result=>{chatroom = result;console.log("chatroom found");})
+.catch(error => {
+  console.log(error);
+  console.log("error while finding chatroom");
+next(error);
+});
+await console.log(chatroom);
+//db.users.findOneAndUpdate({_id:ObjectId("62c82f1f46e79b71a2b075e3")}, {$pull:{chatroomInvitations:ObjectId("62c82f1370026d5b6f5e36cb")}})
+ await User.findOneAndUpdate({_id:userId}, {  $addToSet: {chatrooms: invitationId},
+   $pull:{chatroomInvitations:invitationId},
+})
+.then(result => {
+  console.log("found user to update:")
+  console.log(result)
+res.locals.success = true;
+next();
+})
+.catch(error => {
+  console.log(error);
+next(error);
+});
+
+
+ } else {
+ next(new Error("User must log in."));
+ }
+},
+
+invitaionView:(req, res, next)=>{
+res.render("users/invite");
+},
+
+
+sendInvitation:async (req, res, next)=>{
+  let userEmail = req.body.email;
+  let user;
+  let invitationPath = req.body.chatroomPath;
+  console.log("email: "+userEmail);
+
+  //find User
+  await User.find({email:userEmail})
+	 .then(result=>{user = result;console.log(user); console.log("fund user to invite")})
+   .catch(error => {
+     console.log(error);
+     next(error);
+      });
+
+//findChatroom
+let chatroom;
+  await Chatroom.findOne({chatroomPath:[invitationPath]})
+  .then(result=>{chatroom = result;console.log(chatroom); console.log("fund chatroom")})
+  .catch(error => {
+    console.log(error);
+    next(error);
+     });
+
+  console.log(chatroom._id);
+
+let chatroomId =chatroom._id;
+
+//add Invitation to the Array of Invitaions
+  await User.findByIdAndUpdate(user, {
+   $addToSet: {chatroomInvitations: [chatroomId]},
+ }).exec()
+   .then(updatedUser => {
+     console.log(updatedUser);
+     console.log("invited user");
+     res.locals.success = true;
+     res.locals.redirect = "./";
+     next();
+   })
+   .catch(error => {
+     console.log(error);
+   next(error);
+   });
+},
+
+errorJSON: (error, req, res, next) => {
+ let errorObject;
+ if (error) {
+ errorObject = {
+status: httpStatus.INTERNAL_SERVER_ERROR,
+message: error.message
+ };
+ } else {
+ errorObject = {
+status: httpStatus.OK,
+message: "Unknown Error."
+ };
+ }
+ res.json(errorObject);
+},
+
 
     getAllUsers:  (req, res, next) => {
       User.find( {})
@@ -77,22 +226,6 @@ module.exports =  {
          next();
        }
      });
-    // User.create(getUserParams(req.body))
-    // .then(result => {
-    //   req.flash("success", `${result.name}'s account created successfully!`);
-    //   res.locals.redirect = `/confirmMail`;
-    //   res.locals.user = result;
-    //   next();
-    // })
-    // .catch(error => {
-    //   console.log(`Error saving user: ${error.message}`);
-    //   res.locals.redirect = "/";
-    //   req.flash(
-    //     "error",
-    //     `Failed to create user account because: ${error.message}.`
-    //   );
-    //   next(error);
-    //   });
   },
 
   showChatrooms: (req, res) => {
@@ -114,7 +247,7 @@ module.exports =  {
   postedSignUp: (req, res) => {
     res.render("confirmMail");
   },
-
+/*
   new: (req, res) => {
     res.render("users/new");
   },
@@ -138,7 +271,7 @@ module.exports =  {
       next();
    });
   },
-
+*/
   redirectView: (req, res, next) => {
    let redirectPath = res.locals.redirect;
    console.log(redirectPath);
@@ -173,7 +306,8 @@ logout: (req, res, next) => {
    let userId = req.params.id;
   User.findById(userId)
    .populate("chatrooms")
-   .then(result=> {res.locals.user = result;next();})
+   .populate("chatroomInvitations")
+   .then(result=> {res.locals.user = result;console.log(result);next();})
    .catch(error => {
     console.log(`Error fetching user by ID: ${error.message}`);
     next(error);
@@ -221,6 +355,7 @@ delete: (req, res, next) => {
 },
 
 validate: (req, res, next) => {
+  console.log(req.body);
  req.sanitizeBody("email").normalizeEmail({
    all_lowercase: true
  }).trim();
@@ -242,5 +377,4 @@ validate: (req, res, next) => {
   }
  });
 }
-
 };

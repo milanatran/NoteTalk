@@ -1,13 +1,32 @@
-<%- include ('partials/navigation.ejs') %>
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>NoteTalk</title>
 
-<div class="flashes">
-  <% if (flashMessages) { %>
-    <% if (flashMessages.success) { %>
-      <div class="flash success"><%= flashMessages.success %></div>
-    <% } else if (flashMessages.error) { %>
-      <div class="flash error"><%= flashMessages.error %></div>
-    <% } %>
-  <% } %>
-</div>
-<%- body %>
-<div id="footer">FOOTER blabla </div>
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script defer src="/js/notetalkApp.js"></script>
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+
+  </head>
+  <body>
+    <%- include ('partials/navigation.ejs') %>
+    <div class="flashes">
+      <% if (flashMessages) { %>
+        <% if (flashMessages.success) { %>
+          <div class="flash success"><%= flashMessages.success %></div>
+        <% } else if (flashMessages.error) { %>
+          <div class="flash error"><%= flashMessages.error %></div>
+        <% } %>
+      <% } %>
+    </div>
+      <div class="login">
+        <% if(loggedIn) {%>
+        <% } %>
+      </div>
+    <%- body %>
+    <div id="footer">FOOTER blabla </div>
+
+  </body>
+</html>
