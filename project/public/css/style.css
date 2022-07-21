@@ -1,7 +1,50 @@
-header {
-  font-style: italic;
-}
+
 
 body {
-  background-color: purple;
+  /* background-color: purple; */
+  background-image: url("/images/background.jpeg");
+  background-size: cover;
+
+}
+a:link {
+  color: black;
+  text-decoration: none;
+}
+a:visited {
+  color: black;
+  text-decoration: none;
+}
+
+#nav {
+  margin-top: 2%;
+}
+
+#noteTalk {
+  text-align: center;
+  margin-right: 30%;
+  margin-top: 20%;
+  font-family: "Times New Roman", Times, serif;
+  font-size: 80px;
+}
+
+#QuickPromo {
+  font-family: "Courier New", Times, serif;
+  font-size: 15px;
+  text-align: center;
+  margin-right: 30%;
+  
+
+}
+
+#bar-icon {
+  /* position: relative; */
+  padding: 0.7%;
+  border: 1px solid black;
+}
+
+#footer {
+  margin-bottom: 1%;
+  font-size: 12px;
+  position: absolute;
+  bottom: 0;
 }

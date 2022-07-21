@@ -1,12 +1,23 @@
+<div id="nav">
 
-    <div id="nav">NAVIGATION</div>
 
-    <div class="login">
-    <% if (loggedIn) { %>
-     Logged in as <a href="<%=`/users/${currentUser._id}`%>"> <%= currentUser.name  %></a>
-     <a href="/users/logout">Log out</a>
-    <%} else {%>
-     <a href="/signIn">Log In</a>
-    <% } %>
-    <a href="/chat" class="chat-icon">@</a>
-    </div>
+
+    <!-- <div id="navigation">NAVIGATION</div> -->
+      <a id="bar-icon" href="/">Home</a>
+
+      <% if (loggedIn) { %>
+          <a id="bar-icon" href="<%=`/users/${currentUser._id}`%>"> Profile </a>
+          <a id="bar-icon" href="/chat" class="chat-icon">@</a>
+          <a id="bar-icon" href="/users/logout">Log out</a>
+
+      <%} else {%>
+         <a id="bar-icon" href="/signUp">Sign Up</a>
+         <a id="bar-icon" href="/signIn">Log In</a>
+      <% } %>
+
+
+
+
+
+
+</div>
